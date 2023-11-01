@@ -34,7 +34,10 @@ size_t binary_tree_nodes(const binary_tree_t *tree)
 	if (!tree->left && !tree->right)
 		return (0);
 
-
+	/**
+		* the function count should count the parent node only once; so it should
+		* be added eaither in left or right
+	*/
 	left = count(tree) + binary_tree_nodes(tree->left);
 	right = right + binary_tree_nodes(tree->right);
 
