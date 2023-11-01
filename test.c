@@ -1,10 +1,28 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "binary_trees.h"
 
-void print_b(const binary_tree_t *tree)
+/**
+ * main - Entry point
+ *
+ * Return: Always 0 (Success)
+ */
+int main(void)
 {
-	if (!tree)
-		return;
-	print_b(tree->left);
-	print_b(tree->right);
-	printf("%d\n", tree->n);
+    binary_tree_t *root;
+
+    root = binary_tree_node(NULL, 98);
+    root->left = binary_tree_node(root, 12);
+    root->right = binary_tree_node(root, 402);
+    binary_tree_insert_right(root->left, 54);
+	binary_tree_insert_right(root->left->right, 77);
+
+    binary_tree_insert_left(root->left, 128);
+	binary_tree_insert_left(root->right, 66);
+
+    binary_tree_print(root);
+
+	printf(("%lu\n"), binary_tree_height(root->left->right->right));
+
+
 }
