@@ -85,6 +85,4 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 	if (is_complete(tree))
 		return (1);
 	return (0);
-
 }
-
