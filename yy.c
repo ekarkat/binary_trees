@@ -159,26 +159,6 @@ binary_tree_t *binary_tree_node(binary_tree_t *parent, int value)
 
 /*-----------------------100-----------------------*/
 
-int count_parent(const binary_tree_t *node)
-{
-	binary_tree_t *tmp = node;
-	int count = 1;
-
-	if (!tmp)
-		return (0);
-	while (tmp)
-	{
-		if (tmp->parent)
-		{
-			count = count + 1;
-			tmp = tmp->parent;
-		}
-		else
-			break;
-	}
-	return (count);
-}
-
 binary_tree_t *binary_trees_ancestor(const binary_tree_t *first,
 										const binary_tree_t *second)
 {
@@ -186,6 +166,9 @@ binary_tree_t *binary_trees_ancestor(const binary_tree_t *first,
 	const binary_tree_t *sec_par_tree;
 	
 	first_par_tree = first;
+	int n = 5;
+	int arr[n];
+	arr[0] = 15;
 
 	if (!first || !second)
 		return (NULL);
@@ -195,36 +178,134 @@ binary_tree_t *binary_trees_ancestor(const binary_tree_t *first,
 		sec_par_tree = second;
 		while (sec_par_tree)
 		{
+				printf("%d \n" , arr[0]);
 			if (first_par_tree == sec_par_tree)
 				return((binary_tree_t *)sec_par_tree);
 			sec_par_tree = sec_par_tree->parent;
 		}
 		first_par_tree = first_par_tree->parent;
 	}
+
+
 	return (NULL);
 }
 
 
 
 
+binary_tree_t **tree_leaf(binary_tree_t **tree_tab, int size)
+{
+	binary_tree_t **new;
+	new = malloc(sizeof(binary_tree_t *) * (size * 2));
+	int i = 0;
+	int j = 0;
+
+	while (i < (size * 2))
+	{
+		if (tree_tab[j]->left == NULL)
+			new[i] = NULL;
+		else
+			new[i] = tree_tab[j]->left;
+		if (tree_tab[j]->right == NULL)
+			new[i + 1] = NULL;
+		else
+			new[i + 1] = tree_tab[j]->right;
+		j = j + 1;
+		i = i + 2;
+	}
+
+	return (new);
+}
 
 
+/* level start from 1; root = 1*/
+binary_tree_t **tree_table(binary_tree_t *node, int level)
+{
+	binary_tree_t **table;
+
+	table = &node;
+	int i = 1;
+	if (level >= 2)
+	{
+		while (i < level)
+		{
+			table = tree_leaf(table, i);
+			i = i + 1;
+		}
+	}
+
+	return (table);
+}
+
+int is_leef(const binary_tree_t *tree)
+{
+	if (!tree->left && !tree->right)
+		return (1);
+	return (0);
+}
+
+size_t binary_tree_depth(const binary_tree_t *tree)
+{
+
+	int depth;
+
+	if (!tree)
+		return (0);
+
+	if (!tree->parent)
+		return (0);
+
+	depth = 1 + binary_tree_depth(tree->parent);
+	return (depth);
+}
+
+int is_complete(const binary_tree_t *tree)
+{
+	if (!tree)
+		return (0);
+	if (is_leef(tree) == 1)
+		return (binary_tree_depth(tree));
+	
+	int left, right;
+
+	left = is_complete(tree->left);
+	right = is_complete(tree->right);
+
+	if (left && right)
+	{
+		if (left == right)
+{			printf("%d\n", left);		
+			return(left);
+			}
+		return (0);
+
+	}
+	if (!right && left)
+	{
+		return(left);
+	}
+	if (!left && right)
+	{
+		return (right);
+	}
+	return (0);
+}
+
+int binary_tree_is_complete(const binary_tree_t *tree)
+{
+	if (!tree)
+		return (0);
+	if (!tree->parent && !tree->left && tree->right)
+		return (1);
+	if (is_complete(tree))
+		return (1);
+	return (0);
+
+}
 
 
 /*------------------------------------------------*/
 
-
-void launch_test(binary_tree_t *n1, binary_tree_t *n2)
-{
-    binary_tree_t *ancestor;
-
-    ancestor = binary_trees_ancestor(n1, n2);
-    printf("Ancestor of [%d] & [%d]: ", n1->n, n2->n);
-    if (!ancestor)
-        printf("(nil)\n");
-    else
-        printf("%d\n", ancestor->n);
-}
 
 
 int main(void)
@@ -240,11 +321,10 @@ int main(void)
     root->right->left = binary_tree_node(root->right, 45);
     root->right->right->left = binary_tree_node(root->right->right, 92);
     root->right->right->right = binary_tree_node(root->right->right, 65);
+	binary_tree_insert_left(root->right->left, 22);
     binary_tree_print(root);
 
-    launch_test(root->left, root->right);
-    launch_test(root->left, root->right->right->left);
-    launch_test(root->right->left, root->right->right->right);
-    launch_test(root->right->right, root->right->right->right);
+
+	printf("%d\n", binary_tree_is_complete(root->left->left));
     return (0);
 }
