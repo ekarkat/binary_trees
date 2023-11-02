@@ -55,9 +55,7 @@ int is_complete(const binary_tree_t *tree)
 	if (left && right)
 	{
 		if (left == right)
-{			printf("%d\n", left);
 			return (left);
-			}
 		return (0);
 
 	}
