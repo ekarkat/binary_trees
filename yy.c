@@ -304,6 +304,55 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 }
 
 
+int is_node_valid_left(const binary_tree_t *tree, int val)
+{
+	int left = 0;
+	int right = 0;
+
+	if (!tree)
+		return (0);
+
+
+	left = left + is_node_valid_left(tree->left, val);
+	right = right + is_node_valid_left(tree->right, val);
+
+
+	if (val > tree->n && tree)
+		{	printf("tree-> %d val %d\n", tree->n, val);
+			
+			return (0);}
+	else 
+		return (1);
+	return (left + right);
+}
+
+int is_node_valid_right(const binary_tree_t *tree, int val)
+{
+	int left = 0;
+	int right = 0;
+
+	if (!tree)
+		return (0);
+
+
+
+	left = left + is_node_valid_right(tree->left, val);
+	right = right + is_node_valid_right(tree->right, val);
+
+	if (tree)
+	{
+		if (val < tree->n)
+		{
+			left = 0;
+		}
+		else
+		{
+			left = 1;
+			right = 1;
+		}
+	}
+	return ((left + right));
+}
 /*------------------------------------------------*/
 
 
@@ -322,9 +371,11 @@ int main(void)
     root->right->right->left = binary_tree_node(root->right->right, 92);
     root->right->right->right = binary_tree_node(root->right->right, 65);
 	binary_tree_insert_left(root->right->left, 22);
+	binary_tree_insert_left(root->left->left, 44);
+	root->left->left->n = 150;
+
     binary_tree_print(root);
 
-
-	printf("%d\n", binary_tree_is_complete(root->left->left));
+	printf("%d\n", is_node_valid_right(root->right, root->n));
     return (0);
 }
